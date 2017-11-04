@@ -1,0 +1,11 @@
+nav a {
+  display: block;
+}
+
+.active {
+  color: green;
+}
+
+.table {
+  border: solid black;
+}
