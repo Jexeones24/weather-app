@@ -1,6 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import './index.css'
+import './index.css'
 import App from './App'
+import { Router } from './components/router'
 
-ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>
+  , document.getElementById('app'))

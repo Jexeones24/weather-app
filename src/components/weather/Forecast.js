@@ -1,8 +1,6 @@
 import React from 'react'
 
-const Forecast = () =>
+export const Forecast = () =>
   <div>
     FORECAST
   </div>
-
-export default Forecast

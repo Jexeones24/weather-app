@@ -9,3 +9,12 @@ nav a {
 .table {
   border: solid black;
 }
+
+.footer a {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.footer a.active {
+  font-weight: bold;
+}
