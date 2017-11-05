@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import './App.css'
 import { Forecast, Footer } from './components/weather'
 import { loadLocalWeather, loadWeather } from './lib/weatherService'
-import FilterableTable from './components/weather/FilterableTable'
+import TableContainer from './components/weather/TableContainer'
 
 class App extends Component {
   state = {
+    loading: true,
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
     weather: []
   }
@@ -31,7 +32,10 @@ class App extends Component {
           weather.avgTemp = data.main.temp
           weather.high = data.main.temp_max
           weather.low = data.main.temp_min
-          self.setState({ weather: [...self.state.weather, weather] }, () => {console.log('weather:', self.state.weather)})
+          self.setState({
+            weather: [...self.state.weather, weather],
+            loading: false
+          })
         })
       }
     function error () {
@@ -42,20 +46,25 @@ class App extends Component {
   }
 
   render () {
+    
+    let renderContent = () =>
+      this.state.loading ?
+      <div>Loading...</div> :
+      <div className='weather-app'>
+        <TableContainer
+          categories={this.state.categories}
+          weather={this.state.weather}
+        />
+        <Footer />
+      </div>
+
     return (
       <div className='App'>
         <div className='App-header'>
           <img src='' alt=''/>
           <h2>WEATHER APP</h2>
         </div>
-        <div className='weather-app'>
-          <button onClick={this.geoFindMe}>Find me</button>
-          <FilterableTable
-            categories={this.state.categories}
-            weather={this.state.weather}
-          />
-          <Footer />
-        </div>
+        {renderContent()}
       </div>
     )
   }

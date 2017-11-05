@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import SearchBar from './SearchBar'
 import ForecastTable from './ForecastTable'
 
-class FilterableTable extends Component {
+class TableContainer extends Component {
   state = {
     searchCity: ''
   }
@@ -31,4 +31,4 @@ class FilterableTable extends Component {
   }
 }
 
-export default FilterableTable
+export default TableContainer
