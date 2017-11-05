@@ -1,35 +1,31 @@
 import React, { Component } from 'react'
 import './App.css'
 import { Home, Forecast, Footer } from './components/weather'
+import { loadWeather } from './lib/weatherService'
 
 class App extends Component {
   state = {
     titles: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
-    // details: [
-    //   {
-    //     'city': '',
-    //     'country': '',
-    //     'avgTemp': null,
-    //     'high': null,
-    //     'low': null
-    //   }
-    // ]
-    details: []
+    weather: [],
+    searchCity: ''
   }
 
   componentDidMount () {
-    return fetch('http://api.openweathermap.org/data/2.5/weather?q=detroitid=524901&APPID=bf8ca4717bdd97a9ba7800e9f63c7b72')
-      .then(resp => resp.json())
+    loadWeather()
       .then(data => {
-        let details = this.state.details
-        details.city = data.name
-        details.country = data.sys.country
-        details.avgTemp = data.main.temp
-        details.high = data.main.temp_max
-        details.low = data.main.temp_min
-        this.setState({ details: [...this.state.details, details] }, () => { console.log('details:', this.state.details, 'titles:', this.state.titles) })
+        let weather = this.state.weather
+        weather.city = data.name
+        weather.country = data.sys.country
+        weather.avgTemp = data.main.temp
+        weather.high = data.main.temp_max
+        weather.low = data.main.temp_min
+        this.setState({ weather: [...this.state.weather, weather] }, () => { console.log('weather:', this.state.weather, 'titles:', this.state.titles) })
       })
     }
+
+  getSearchCity = (city) => {
+    this.setState({searchCity: city}, () => {console.log('search this city:', this.state.searchCity)})
+  }
 
   render () {
     return (
@@ -39,7 +35,11 @@ class App extends Component {
           <h2>WEATHER APP</h2>
         </div>
         <div className='weather-app'>
-          <Home titles={this.state.titles} details={this.state.details} />
+          <Home
+            titles={this.state.titles}
+            weather={this.state.weather}
+            getSearchCity={this.getSearchCity}
+          />
           <Footer />
         </div>
       </div>
