@@ -1,30 +1,44 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Home, Forecast, Footer } from './components/weather'
-import { loadWeather } from './lib/weatherService'
+import { Forecast, Footer } from './components/weather'
+import { loadLocalWeather, loadWeather } from './lib/weatherService'
+import FilterableTable from './components/weather/FilterableTable'
 
 class App extends Component {
   state = {
-    titles: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
-    weather: [],
-    searchCity: ''
+    categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
+    weather: []
   }
 
   componentDidMount () {
-    loadWeather()
-      .then(data => {
-        let weather = this.state.weather
-        weather.city = data.name
-        weather.country = data.sys.country
-        weather.avgTemp = data.main.temp
-        weather.high = data.main.temp_max
-        weather.low = data.main.temp_min
-        this.setState({ weather: [...this.state.weather, weather] }, () => { console.log('weather:', this.state.weather, 'titles:', this.state.titles) })
-      })
-    }
+    this.getGeoLocation()
+  }
 
-  getSearchCity = (city) => {
-    this.setState({searchCity: city}, () => {console.log('search this city:', this.state.searchCity)})
+  getGeoLocation () {
+    let self = this
+    if (!navigator.geolocation) {
+      alert('geolocation unavailable')
+      return;
+    }
+    function success (position) {
+      let lat  = position.coords.latitude
+      let lon = position.coords.longitude
+      loadLocalWeather(lat, lon)
+        .then(data => {
+          let weather = self.state.weather
+          weather.city = data.name
+          weather.country = data.sys.country
+          weather.avgTemp = data.main.temp
+          weather.high = data.main.temp_max
+          weather.low = data.main.temp_min
+          self.setState({ weather: [...self.state.weather, weather] }, () => {console.log('weather:', self.state.weather)})
+        })
+      }
+    function error () {
+      alert('error')
+    }
+    console.log('loading local weather...')
+    navigator.geolocation.getCurrentPosition(success, error)
   }
 
   render () {
@@ -35,10 +49,10 @@ class App extends Component {
           <h2>WEATHER APP</h2>
         </div>
         <div className='weather-app'>
-          <Home
-            titles={this.state.titles}
+          <button onClick={this.geoFindMe}>Find me</button>
+          <FilterableTable
+            categories={this.state.categories}
             weather={this.state.weather}
-            getSearchCity={this.getSearchCity}
           />
           <Footer />
         </div>

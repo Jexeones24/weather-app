@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 export class Link extends Component {
 
-  // to use Context (same as exposing childContextTypes)
+  // to declare what this component wants from context (subscribing)
   static contextTypes = {
     route: PropTypes.string,
     linkHandler: PropTypes.func
