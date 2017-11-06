@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import SearchBar from './SearchBar'
+import { SearchBar } from './SearchBar'
 import ForecastTable from './ForecastTable'
 import PropTypes from 'prop-types'
 
@@ -8,7 +8,9 @@ class TableContainer extends Component {
     return (
       <div>
         <SearchBar
-          getSearchCity={this.props.getSearchCity}
+          fetchWeather={this.props.fetchWeather}
+          handleInputChange={this.props.handleInputChange}
+          handleSubmit={this.props.handleSubmit}
           searchCity={this.props.searchCity}
         />
         <ForecastTable
@@ -23,7 +25,7 @@ class TableContainer extends Component {
 export default TableContainer
 
 TableContainer.propTypes = {
-  getSearchCity: PropTypes.func,
+  fetchWeather: PropTypes.func,
   searchCity: PropTypes.string,
   categories: PropTypes.arrayOf(PropTypes.string),
   weather: PropTypes.array

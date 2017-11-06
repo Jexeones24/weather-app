@@ -18,6 +18,7 @@ class App extends Component {
   }
 
   // on refactor - helper function to create weather object frmom fetch
+    // build your first production quality react application
   getGeoLocation () {
     let self = this
     if (!navigator.geolocation) {
@@ -48,7 +49,7 @@ class App extends Component {
     navigator.geolocation.getCurrentPosition(success, error)
   }
 
-  getSearchCity = (searchCity) => {
+  fetchWeather = (searchCity) => {
     this.setState({ searchCity }, () => {
       loadWeather(searchCity)
         .then(data => {
@@ -63,6 +64,17 @@ class App extends Component {
     })
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault()
+    this.fetchWeather(this.state.searchCity)
+    this.setState({ searchCity: '' })
+  }
+
+  handleInputChange = (event) => {
+    this.setState({ searchCity: event.target.value })
+    console.log('find weather for:', this.state.searchCity)
+  }
+
   render () {
 
     let renderContent = () =>
@@ -72,7 +84,10 @@ class App extends Component {
         <TableContainer
           categories={this.state.categories}
           weather={this.state.weather}
-          getSearchCity={this.getSearchCity}
+          handleInputChange={this.handleInputChange}
+          handleSubmit={this.handleSubmit}
+          searchCity={this.state.searchCity}
+          fetchWeather={this.fetchWeather}
         />
         <Footer />
       </div>
