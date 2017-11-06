@@ -110,8 +110,8 @@ class App extends Component {
             searchCity={this.state.searchCity}
             fetchWeather={this.fetchWeather}
           />
+          <Footer />
         </div>}
-        <Footer />
       </div>
     )
   }

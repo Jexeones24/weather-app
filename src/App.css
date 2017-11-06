@@ -3,12 +3,16 @@
 }
 
 .footer a {
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 0;
+  padding-right: 15px;
 }
 
 .footer a.active {
   font-weight: bold;
+}
+
+div.footer {
+  padding-top: 20px;
 }
 
 .App-header {
@@ -23,6 +27,6 @@
 }
 
 .text-muted {
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
