@@ -12,14 +12,14 @@ export class Router extends Component {
     route: getCurrentPath()
   }
 
+  // updates route on click
   handleLinkClick = (route) => {
-    this.setState({route})
+    this.setState({ route })
     //eslint-disable-next-line
     history.pushState(null, '', route)
   }
 
   // expose types want available to child component
-  // why static?
   static childContextTypes = {
     route: PropTypes.string,
     linkHandler: PropTypes.func

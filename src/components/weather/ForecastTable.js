@@ -1,10 +1,18 @@
 import React, { Component } from 'react'
+import { Link } from '../router/Link'
+import { SearchBar } from './SearchBar'
 
 export default class ForecastTable extends Component {
   render () {
     return (
       <div>
-        <table className='table'>
+        <SearchBar
+          fetchWeather={this.props.fetchWeather}
+          handleInputChange={this.props.handleInputChange}
+          handleSubmit={this.props.handleSubmit}
+          searchCity={this.props.searchCity}
+        />
+        <table className='table table-bordered table-inverse'>
           <thead>
             <tr>
               {this.props.categories.map(title => <Category key={title} title={title} />)}
@@ -33,5 +41,5 @@ const Row = ({detail}) =>
   </tr>
 
 const Description = (props) => {
-  return (props.property === 'city') ? <td><a href="/forecast">{props.name}</a></td> : <td>{props.name}</td>
+  return (props.property === 'city') ? <td><Link to='/forecast'>{props.name}</Link></td> : <td>{props.name}</td>
 }

@@ -5,8 +5,6 @@ import TableContainer from './components/weather/TableContainer'
 import { loadLocalWeather, loadWeather } from './lib/weatherService'
 
 class App extends Component {
-  // property initializer syntax - state is instance property of this class
-  // arrow function syntax makes the function a property that equals a fxn
   state = {
     loading: true,
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
@@ -85,6 +83,7 @@ class App extends Component {
     this.setState({ searchCity: event.target.value })
   }
 
+  // disables input field after
   handleInvalidInput = (event) => {
     this.setState({
       errorMessage: 'City must not contain numbers'
@@ -101,8 +100,8 @@ class App extends Component {
         <Header />
         {this.state.loading ?
         <div><h2>Fetching local weather...</h2></div> :
-        <div className='weather-app'>
-          {this.state.errorMessage && <span className='error'>{this.state.errorMessage}</span>}
+        <div className='container'>
+          {this.state.errorMessage && <span className='alert alert-danger'>{this.state.errorMessage}</span>}
           <TableContainer
             categories={this.state.categories}
             weather={this.state.weather}
@@ -111,8 +110,8 @@ class App extends Component {
             searchCity={this.state.searchCity}
             fetchWeather={this.fetchWeather}
           />
-          <Footer />
         </div>}
+        <Footer />
       </div>
     )
   }

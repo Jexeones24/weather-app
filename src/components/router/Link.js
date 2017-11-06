@@ -11,12 +11,11 @@ export class Link extends Component {
 
   handleClick = (event) => {
     event.preventDefault()
-    // replace history.pushState() with:
     this.context.linkHandler(this.props.to)
   }
+  
   render () {
     const activeClass = this.context.route === this.props.to ? 'active' : ''
-    // children are in Footer.js
     return <a href='#' className={activeClass} onClick={this.handleClick}>{this.props.children}</a>
   }
 }

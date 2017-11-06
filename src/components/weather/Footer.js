@@ -4,8 +4,8 @@ import { Link } from '../router'
 export const Footer = () => {
   return (
     <div className='footer'>
-      <Link to='/'>Home</Link>
-      <Link to='/forecast'>5-Day Forecast</Link>
+      <Link to='/'>HOME</Link>
+      <Link to='/maps'>MAPS</Link>
     </div>
   )
 }
