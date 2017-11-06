@@ -10,7 +10,8 @@ class App extends Component {
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
     weather: [],
     searchCity: '',
-    errorMessage: ''
+    errorMessage: '',
+    fiveDayForecastVisible: false
   }
 
   componentDidMount () {
@@ -90,25 +91,34 @@ class App extends Component {
     })
   }
 
+  renderFiveDayForecast = () => {
+    console.log('rendering 5-day forecast')
+    this.setState({ fiveDayForecastVisible: true })
+  }
+
   render () {
     const submitHandler = this.state.searchCity ? this.handleSubmit : this.handleEmptySubmit
 
     const inputHandler = /\d/.test(this.state.searchCity) === true ? this.handleInvalidInput : this.handleInputChange
 
+    const isLoading = this.state.loading && <div className='fetch-msg'><h2>Fetching local weather...</h2></div>
+
+    const displayErrors = this.state.errorMessage && <span className='alert alert-danger'>{this.state.errorMessage}</span>
+
     return (
       <div className='App'>
         <Header />
-        {this.state.loading ?
-        <div><h2>Fetching local weather...</h2></div> :
         <div className='container'>
-          {this.state.errorMessage && <span className='alert alert-danger'>{this.state.errorMessage}</span>}
+          {isLoading}
+          {displayErrors}
           <TableContainer
             categories={this.state.categories}
             weather={this.state.weather}
             handleInputChange={inputHandler}
-            handleSubmit={submitHandler}
+            submitHandler={submitHandler}
             searchCity={this.state.searchCity}
             fetchWeather={this.fetchWeather}
+            renderFiveDayForecast={this.renderFiveDayForecast}
           />
           <Footer />
         </div>}

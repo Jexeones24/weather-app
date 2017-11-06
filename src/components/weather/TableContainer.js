@@ -10,8 +10,9 @@ class TableContainer extends Component {
         weather={this.props.weather}
         fetchWeather={this.props.fetchWeather}
         handleInputChange={this.props.handleInputChange}
-        handleSubmit={this.props.handleSubmit}
+        submitHandler={this.props.submitHandler}
         searchCity={this.props.searchCity}
+        renderFiveDayForecast={this.props.renderFiveDayForecast}
       />
     )
   }

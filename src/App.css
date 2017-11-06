@@ -5,6 +5,7 @@
 .footer a {
   padding-left: 0;
   padding-right: 15px;
+  padding-left: 2px;
 }
 
 .footer a.active {
@@ -17,6 +18,11 @@ div.footer {
 
 .App-header {
   text-align: center;
+}
+
+.fetch-msg {
+  font-weight: bold;
+  color: red;
 }
 
 .card-block {

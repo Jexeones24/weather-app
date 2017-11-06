@@ -9,7 +9,7 @@ export default class ForecastTable extends Component {
         <SearchBar
           fetchWeather={this.props.fetchWeather}
           handleInputChange={this.props.handleInputChange}
-          handleSubmit={this.props.handleSubmit}
+          submitHandler={this.props.submitHandler}
           searchCity={this.props.searchCity}
         />
         <table className='table table-bordered table-inverse'>
@@ -19,7 +19,12 @@ export default class ForecastTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.weather.map((detail, idx) => <Row key={idx} detail={detail} />)}
+            {this.props.weather.map((detail, idx) =>
+              <Row
+                key={idx}
+                detail={detail}
+                renderFiveDayForecast={this.props.renderFiveDayForecast}
+              />)}
           </tbody>
         </table>
       </div>
@@ -27,19 +32,20 @@ export default class ForecastTable extends Component {
   }
 }
 
-const Category = ({title}) => <th>{title}</th>
+const Category = ({title}) => <th><h3>{title}</h3></th>
 
-const Row = ({detail}) =>
+const Row = ({detail, renderFiveDayForecast}) =>
   <tr>
     {Object.keys(detail).map((property, idx) =>
       <Description
         key={idx}
         name={detail[property]}
         property={property}
+        renderFiveDayForecast={renderFiveDayForecast}
       />
     )}
   </tr>
 
 const Description = (props) => {
-  return (props.property === 'city') ? <td><Link to='/forecast'>{props.name}</Link></td> : <td>{props.name}</td>
+  return (props.property === 'city') ? <td><Link to='/forecast'><h4 onClick={props.renderFiveDayForecast}>{props.name}</h4></Link></td> : <td><h4>{props.name}</h4></td>
 }
