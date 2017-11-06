@@ -2,13 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export const SearchBar = (props) =>
-  // add autocomplete - http://hackingbeauty.com/create-a-reactjs-component-part1/
-
   <div>
     <form onSubmit={props.handleSubmit}>
       <input
         type='text'
-        placeholder='search city...'
+        placeholder='enter a city...'
         value={props.searchCity}
         onChange={props.handleInputChange}
       />

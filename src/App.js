@@ -5,6 +5,8 @@ import TableContainer from './components/weather/TableContainer'
 import { loadLocalWeather, loadWeather } from './lib/weatherService'
 
 class App extends Component {
+  // property initializer syntax - state is instance property of this class
+  // arrow function syntax makes the function a property that equals a fxn
   state = {
     loading: true,
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
@@ -22,14 +24,15 @@ class App extends Component {
   getGeoLocation () {
     let self = this
     if (!navigator.geolocation) {
-      alert('Geolocation unavailable')
+      self.setState({ errorMessage: 'Geolocation unavailable' })
       return;
     }
+    navigator.geolocation.getCurrentPosition(success, error)
     function success (position) {
       let lat  = position.coords.latitude
       let lon = position.coords.longitude
       loadLocalWeather(lat, lon)
-        .then(data => {
+        .then((data) => {
           let weatherData = {}
           weatherData.city = data.name
           weatherData.country = data.sys.country
@@ -43,9 +46,8 @@ class App extends Component {
         })
       }
     function error () {
-      alert('There was an error fetching local weather')
+      console.log('Geolocation unavailable')
     }
-    navigator.geolocation.getCurrentPosition(success, error)
   }
 
   fetchWeather = (searchCity) => {
@@ -83,8 +85,16 @@ class App extends Component {
     this.setState({ searchCity: event.target.value })
   }
 
+  handleInvalidInput = (event) => {
+    this.setState({
+      errorMessage: 'City must not contain numbers'
+    })
+  }
+
   render () {
     const submitHandler = this.state.searchCity ? this.handleSubmit : this.handleEmptySubmit
+
+    const inputHandler = /\d/.test(this.state.searchCity) === true ? this.handleInvalidInput : this.handleInputChange
 
     return (
       <div className='App'>
@@ -96,7 +106,7 @@ class App extends Component {
           <TableContainer
             categories={this.state.categories}
             weather={this.state.weather}
-            handleInputChange={this.handleInputChange}
+            handleInputChange={inputHandler}
             handleSubmit={submitHandler}
             searchCity={this.state.searchCity}
             fetchWeather={this.fetchWeather}

@@ -19,8 +19,7 @@ export default class ForecastTable extends Component {
   }
 }
 
-const Category = ({title}) =>
-  <th>{title}</th>
+const Category = ({title}) => <th>{title}</th>
 
 const Row = ({detail}) =>
   <tr>
@@ -28,9 +27,11 @@ const Row = ({detail}) =>
       <Description
         key={idx}
         name={detail[property]}
+        property={property}
       />
     )}
   </tr>
 
-const Description = ({name}) =>
-  <td>{name}</td>
+const Description = (props) => {
+  return (props.property === 'city') ? <td><a href="/forecast">{props.name}</a></td> : <td>{props.name}</td>
+}
