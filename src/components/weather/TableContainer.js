@@ -1,26 +1,15 @@
 import React, { Component } from 'react'
 import SearchBar from './SearchBar'
 import ForecastTable from './ForecastTable'
+import PropTypes from 'prop-types'
 
 class TableContainer extends Component {
-  state = {
-    searchCity: ''
-  }
-
-  constructor(props) {
-    super(props)
-  }
-
-  getSearchCity = (searchCity) => {
-    this.setState({ searchCity }, () => {console.log('search city is:', this.state.searchCity)
-    })
-  }
-
   render () {
     return (
       <div>
         <SearchBar
-          getSearchCity={this.getSearchCity}
+          getSearchCity={this.props.getSearchCity}
+          searchCity={this.props.searchCity}
         />
         <ForecastTable
           categories={this.props.categories}
@@ -32,3 +21,10 @@ class TableContainer extends Component {
 }
 
 export default TableContainer
+
+TableContainer.propTypes = {
+  getSearchCity: PropTypes.func,
+  searchCity: PropTypes.string,
+  categories: PropTypes.arrayOf(PropTypes.string),
+  weather: PropTypes.array
+}

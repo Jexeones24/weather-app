@@ -4,8 +4,8 @@ export default class SearchBar extends Component {
   state = { searchCity: '' }
   // add autocomplete - http://hackingbeauty.com/create-a-reactjs-component-part1/
 
-  handleTextChange = () => {
-    this.setState({ searchCity: this.refs.searchCity.value })
+  handleTextChange = (event) => {
+    this.setState({ searchCity: event.target.value })
   }
 
   handleSubmit = (event) => {
@@ -22,7 +22,6 @@ export default class SearchBar extends Component {
             type='text'
             placeholder='search city...'
             value={this.state.searchCity}
-            ref='searchCity'
             onChange={this.handleTextChange}
           />
           <input type="submit"/>

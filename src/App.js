@@ -3,18 +3,21 @@ import './App.css'
 import { Forecast, Footer } from './components/weather'
 import { loadLocalWeather, loadWeather } from './lib/weatherService'
 import TableContainer from './components/weather/TableContainer'
+import { Header } from './components/weather/Header'
 
 class App extends Component {
   state = {
     loading: true,
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
-    weather: []
+    weather: [],
+    searchCity: ''
   }
 
   componentDidMount () {
     this.getGeoLocation()
   }
 
+  // on refactor - helper function to create weather object frmom fetch
   getGeoLocation () {
     let self = this
     if (!navigator.geolocation) {
@@ -26,14 +29,14 @@ class App extends Component {
       let lon = position.coords.longitude
       loadLocalWeather(lat, lon)
         .then(data => {
-          let weather = self.state.weather
-          weather.city = data.name
-          weather.country = data.sys.country
-          weather.avgTemp = data.main.temp
-          weather.high = data.main.temp_max
-          weather.low = data.main.temp_min
+          let weatherData = {}
+          weatherData.city = data.name
+          weatherData.country = data.sys.country
+          weatherData.avgTemp = data.main.temp
+          weatherData.high = data.main.temp_max
+          weatherData.low = data.main.temp_min
           self.setState({
-            weather: [...self.state.weather, weather],
+            weather: [...self.state.weather, weatherData],
             loading: false
           })
         })
@@ -45,25 +48,38 @@ class App extends Component {
     navigator.geolocation.getCurrentPosition(success, error)
   }
 
+  getSearchCity = (searchCity) => {
+    this.setState({ searchCity }, () => {
+      loadWeather(searchCity)
+        .then(data => {
+          let newWeatherData = {}
+          newWeatherData.city = data.name
+          newWeatherData.country = data.sys.country
+          newWeatherData.avgTemp = data.main.temp
+          newWeatherData.high = data.main.temp_max
+          newWeatherData.low = data.main.temp_min
+          this.setState({ weather: [...this.state.weather, newWeatherData] }, () => {console.log(this.state.weather)})
+        })
+    })
+  }
+
   render () {
-    
+
     let renderContent = () =>
       this.state.loading ?
-      <div>Loading...</div> :
+      <div><h2>Fetching local weather...</h2></div> :
       <div className='weather-app'>
         <TableContainer
           categories={this.state.categories}
           weather={this.state.weather}
+          getSearchCity={this.getSearchCity}
         />
         <Footer />
       </div>
 
     return (
       <div className='App'>
-        <div className='App-header'>
-          <img src='' alt=''/>
-          <h2>WEATHER APP</h2>
-        </div>
+        <Header />
         {renderContent()}
       </div>
     )

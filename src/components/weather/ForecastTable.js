@@ -7,7 +7,7 @@ export default class ForecastTable extends Component {
         <table className='table'>
           <thead>
             <tr>
-              {this.props.categories.map(title => <Header key={title} title={title} />)}
+              {this.props.categories.map(title => <Category key={title} title={title} />)}
             </tr>
           </thead>
           <tbody>
@@ -19,14 +19,14 @@ export default class ForecastTable extends Component {
   }
 }
 
-const Header = ({title}) =>
+const Category = ({title}) =>
   <th>{title}</th>
 
 const Row = ({detail}) =>
   <tr>
     {Object.keys(detail).map((property, idx) =>
       <Description
-        key={detail[property]}
+        key={idx}
         name={detail[property]}
       />
     )}
