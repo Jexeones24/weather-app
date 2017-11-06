@@ -12,7 +12,7 @@ export const SearchBar = (props) =>
         value={props.searchCity}
         onChange={props.handleInputChange}
       />
-      <input type="submit"/>
+      <input type='submit' />
     </form>
   </div>
 

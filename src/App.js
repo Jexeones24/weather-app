@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Forecast, Footer } from './components/weather'
-import { loadLocalWeather, loadWeather } from './lib/weatherService'
+import { Forecast, Footer, Header } from './components/weather'
 import TableContainer from './components/weather/TableContainer'
-import { Header } from './components/weather/Header'
+import { loadLocalWeather, loadWeather } from './lib/weatherService'
 
 class App extends Component {
   state = {
     loading: true,
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
     weather: [],
-    searchCity: ''
+    searchCity: '',
+    errorMessage: ''
   }
 
   componentDidMount () {
@@ -22,7 +22,7 @@ class App extends Component {
   getGeoLocation () {
     let self = this
     if (!navigator.geolocation) {
-      alert('geolocation unavailable')
+      alert('Geolocation unavailable')
       return;
     }
     function success (position) {
@@ -43,9 +43,8 @@ class App extends Component {
         })
       }
     function error () {
-      alert('error')
+      alert('There was an error fetching local weather')
     }
-    console.log('loading local weather...')
     navigator.geolocation.getCurrentPosition(success, error)
   }
 
@@ -59,7 +58,7 @@ class App extends Component {
           newWeatherData.avgTemp = data.main.temp
           newWeatherData.high = data.main.temp_max
           newWeatherData.low = data.main.temp_min
-          this.setState({ weather: [...this.state.weather, newWeatherData] }, () => {console.log(this.state.weather)})
+          this.setState({ weather: [...this.state.weather, newWeatherData] })
         })
     })
   }
@@ -67,35 +66,43 @@ class App extends Component {
   handleSubmit = (event) => {
     event.preventDefault()
     this.fetchWeather(this.state.searchCity)
-    this.setState({ searchCity: '' })
+    this.setState({
+      searchCity: '',
+      errorMessage: ''
+    })
+  }
+
+  handleEmptySubmit = (event) => {
+    event.preventDefault()
+    this.setState({
+      errorMessage: 'Please enter a city'
+    })
   }
 
   handleInputChange = (event) => {
     this.setState({ searchCity: event.target.value })
-    console.log('find weather for:', this.state.searchCity)
   }
 
   render () {
-
-    let renderContent = () =>
-      this.state.loading ?
-      <div><h2>Fetching local weather...</h2></div> :
-      <div className='weather-app'>
-        <TableContainer
-          categories={this.state.categories}
-          weather={this.state.weather}
-          handleInputChange={this.handleInputChange}
-          handleSubmit={this.handleSubmit}
-          searchCity={this.state.searchCity}
-          fetchWeather={this.fetchWeather}
-        />
-        <Footer />
-      </div>
+    const submitHandler = this.state.searchCity ? this.handleSubmit : this.handleEmptySubmit
 
     return (
       <div className='App'>
         <Header />
-        {renderContent()}
+        {this.state.loading ?
+        <div><h2>Fetching local weather...</h2></div> :
+        <div className='weather-app'>
+          {this.state.errorMessage && <span className='error'>{this.state.errorMessage}</span>}
+          <TableContainer
+            categories={this.state.categories}
+            weather={this.state.weather}
+            handleInputChange={this.handleInputChange}
+            handleSubmit={submitHandler}
+            searchCity={this.state.searchCity}
+            fetchWeather={this.fetchWeather}
+          />
+          <Footer />
+        </div>}
       </div>
     )
   }
