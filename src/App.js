@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import './App.css'
 import { Forecast, Footer, Header } from './components/weather'
 import TableContainer from './components/weather/TableContainer'
-import { loadLocalWeather, loadWeather } from './lib/weatherService'
+import { loadLocalWeather, loadWeather, loadFiveDayForecast } from './lib/weatherService'
 
 class App extends Component {
   state = {
     loading: true,
     categories: ['CITY', 'COUNTRY', 'AVG. TEMP.', 'HIGH', 'LOW'],
     weather: [],
+    data: null,
     searchCity: '',
     errorMessage: '',
     fiveDayForecastVisible: false
@@ -52,15 +53,20 @@ class App extends Component {
   fetchWeather = (searchCity) => {
     this.setState({ searchCity }, () => {
       loadWeather(searchCity)
-        .then(data => {
+      .then(data => {
+        console.log(data === 'city does not exist')
+        if (data === 'city does not exist') {
+          this.setState({ errorMessage: 'city does not exist' })
+        } else {
           let newWeatherData = {}
           newWeatherData.city = data.name
           newWeatherData.country = data.sys.country
           newWeatherData.avgTemp = data.main.temp
           newWeatherData.high = data.main.temp_max
           newWeatherData.low = data.main.temp_min
-          this.setState({ weather: [...this.state.weather, newWeatherData] })
-        })
+          this.setState({ data }, () => {console.log(this.state.data)})
+        }
+      })
     })
   }
 
@@ -91,9 +97,14 @@ class App extends Component {
     })
   }
 
-  renderFiveDayForecast = () => {
-    console.log('rendering 5-day forecast')
-    this.setState({ fiveDayForecastVisible: true })
+  renderFiveDayForecast = (props) => {
+    console.log(props)
+    let city = props.name
+    let country = props.country
+    this.setState({ fiveDayForecastVisible: true }, () => {
+      loadFiveDayForecast(city, country)
+      .then(data => {console.log(data)})
+    })
   }
 
   render () {
@@ -111,6 +122,7 @@ class App extends Component {
         <div className='container'>
           {isLoading}
           {displayErrors}
+
           <TableContainer
             categories={this.state.categories}
             weather={this.state.weather}
@@ -121,7 +133,7 @@ class App extends Component {
             renderFiveDayForecast={this.renderFiveDayForecast}
           />
           <Footer />
-        </div>}
+        </div>
       </div>
     )
   }

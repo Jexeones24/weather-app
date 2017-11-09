@@ -32,7 +32,7 @@ export default class ForecastTable extends Component {
   }
 }
 
-const Category = ({title}) => <th><h3>{title}</h3></th>
+const Category = ({title}) => <th><h4>{title}</h4></th>
 
 const Row = ({detail, renderFiveDayForecast}) =>
   <tr>
@@ -41,11 +41,12 @@ const Row = ({detail, renderFiveDayForecast}) =>
         key={idx}
         name={detail[property]}
         property={property}
+        details={detail}
         renderFiveDayForecast={renderFiveDayForecast}
       />
     )}
   </tr>
 
 const Description = (props) => {
-  return (props.property === 'city') ? <td><Link to='/forecast'><h4 onClick={props.renderFiveDayForecast}>{props.name}</h4></Link></td> : <td><h4>{props.name}</h4></td>
+  return (props.property === 'city') ? <td><Link to='/forecast'><h4 onClick={props.renderFiveDayForecast.bind(this, props.details)}>{props.name}</h4></Link></td> : <td><h4>{props.name}</h4></td>
 }

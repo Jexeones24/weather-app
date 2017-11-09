@@ -4,7 +4,7 @@ const id = 524901
 
 const handleErrors = (resp) => {
   if (!resp.ok) {
-    throw Error(resp.statusText)
+    throw Error('city does not exist')
   }
   return resp
 }
@@ -20,5 +20,14 @@ export const loadWeather = (city) => {
   return fetch(`${baseURL}?q=${city}id=${id}&APPID=${API_KEY}&units=imperial`)
     .then(handleErrors)
     .then(resp => resp.json())
-    .catch(error => { console.log(error) })
+    .catch(error => error.message)
+}
+
+// try by city id
+// api.openweathermap.org/data/2.5/forecast?id={city ID}
+export const loadFiveDayForecast = (city, country) => {
+  fetch(`api.openweathermap.org/data/2.5/forecast?q=${city},${country}id=${id}&APPID=${API_KEY}&units=imperial`)
+  .then(handleErrors)
+  .then(resp => resp.json())
+  .catch(error => { console.log(error) })
 }
