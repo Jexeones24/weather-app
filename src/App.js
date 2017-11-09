@@ -97,14 +97,15 @@ class App extends Component {
     })
   }
 
+  // figure out best way to get correct query params from onClick - if use city, needs country CODE (that's a weird json file)
   renderFiveDayForecast = (props) => {
-    console.log(props)
-    let city = props.name
-    let country = props.country
-    this.setState({ fiveDayForecastVisible: true }, () => {
-      loadFiveDayForecast(city, country)
-      .then(data => {console.log(data)})
-    })
+    console.log('i should be rendering 5-day forecast')
+    // let city = props.name
+    // let country = props.country
+    // this.setState({ fiveDayForecastVisible: true }, () => {
+    //   loadFiveDayForecast(city, country)
+    //   .then(data => {console.log(data)})
+    // })
   }
 
   render () {
